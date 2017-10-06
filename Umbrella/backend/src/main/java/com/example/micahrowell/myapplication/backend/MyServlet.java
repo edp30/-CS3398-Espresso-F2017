@@ -1,34 +1,48 @@
 package com.example.micahrowell.myapplication.backend;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.logging.Logger;
 
-        import com.google.api.client.googleapis.auth.clientlogin.ClientLogin;
-        import com.google.firebase.FirebaseApp;
-        import com.google.firebase.FirebaseOptions;
-        import com.google.firebase.database.DataSnapshot;
-        import com.google.firebase.database.DatabaseError;
-        import com.google.firebase.database.DatabaseReference;
-        import com.google.firebase.database.FirebaseDatabase;
-        import com.google.firebase.database.ValueEventListener;
-
-        import java.io.FileInputStream;
-        import java.io.IOException;
-        import java.io.UnsupportedEncodingException;
-        import java.util.Iterator;
-        import java.util.Properties;
-        import java.util.logging.Logger;
-
-        import javax.mail.Message;
-        import javax.mail.MessagingException;
-        import javax.mail.Session;
-        import javax.mail.Transport;
-        import javax.mail.internet.InternetAddress;
-        import javax.mail.internet.MimeMessage;
-        import javax.servlet.http.*;
-        import javax.xml.ws.Response;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class MyServlet extends HttpServlet {
     static Logger Log = Logger.getLogger("com.example.micahrowell.myapplication.backend.MyServlet");
+
+    StringBuffer json = new StringBuffer();
+
+    public void callAPI(String city) throws IOException {
+        URL url = new URL("http://api.wunderground.com/api/d59e8a61df5f52ab/conditions/q/TX/San_Marcos.json");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            json.append(line);
+        }
+        reader.close();
+    }
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
